@@ -20,7 +20,6 @@ class Knot:
     def move(self, prev_knot_pos) -> Tuple[Tuple[int, int], bool]:
         xgap = prev_knot_pos[0] - self._position[0]
         ygap = prev_knot_pos[1] - self._position[1]
-        has_moved = False
         # Means it's touching the previous know. No movement.
         if abs(xgap) <= 1 and abs(ygap) <= 1:
             movement = (0, 0)
@@ -35,9 +34,11 @@ class Knot:
         # Need to move diagonally
         else:
             movement = ((xgap // abs(xgap)), (ygap // abs(ygap)))
-        new_x = self._position[0] + movement[0]
-        new_y = self._position[1] + movement[1]
-        self._position = (new_x, new_y)
+        has_moved = any(movement)
+        if has_moved:
+            new_x = self._position[0] + movement[0]
+            new_y = self._position[1] + movement[1]
+            self._position = (new_x, new_y)
         return (self._position, has_moved)
 
     def get_pos(self):
@@ -100,7 +101,9 @@ class Rope2:
     def move_knots(self):
         prev_knot_pos = self.get_head_pos()
         for knot in self._knots:
-            prev_knot_pos, _ = knot.move(prev_knot_pos=prev_knot_pos)
+            prev_knot_pos, has_moved = knot.move(prev_knot_pos=prev_knot_pos)
+            if has_moved is False:
+                break
 
     def get_head_pos(self):
         return self._head_pos
