@@ -60,7 +60,7 @@ class Monkey:
 
     def inspect_item(self, item: Item) -> None:
         worry_level = self._operation_func(item.worry_level)
-        worry_level = floor(worry_level / 3)
+        # worry_level = floor(worry_level / 3)
         item.worry_level = worry_level
         self._items_inspected_count += 1
 
@@ -151,7 +151,15 @@ def part1():
 
 
 def part2():
-    ...
+    parser = InputParser
+    with open("test_input.txt") as f:
+        monkeys = parser.parse_input(f.read())
+    game = MonkeyGame(monkeys)
+    for monkey in game.iter_monkeys():
+        print(monkey.__dict__)
+    for _ in range(1000):
+        game.run_round()
+    return game.compute_monkey_business_level()
 
 
 if __name__ == "__main__":
