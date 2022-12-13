@@ -1,9 +1,10 @@
 import ast
 from typing import Optional
+from itertools import zip_longest
 
 
 def grouper(iterable, n):
-    return zip(*[iter(iterable)] * n)
+    return zip_longest(*[iter(iterable)] * n, fillvalue="")
 
 
 def items_in_right_order(left, right) -> Optional[bool]:
@@ -72,14 +73,11 @@ class Packet:
 
 def part1():
     result = 0
-    with open("test_input.txt") as f:
+    with open("input.txt") as f:
         for i, (left, right, _) in enumerate(grouper(f, 3)):
             left = ast.literal_eval(left)
             right = ast.literal_eval(right)
             right_order = is_right_order(left, right)
-            # print(
-            #     str(right_order) + " vs " + str(bool(_.strip())) + " " + str(3 * i + 1)
-            # )
             if right_order is True:
                 result += i + 1
     return result
