@@ -84,9 +84,27 @@ def part1():
 
 
 def part2():
-    ...
+    first_divider_packet = [[2]]
+    second_divider_packet = [[6]]
+    first_index = 1
+    second_index = 2
+    with open("input.txt") as f:
+        for i, row in enumerate(f):
+            row = row.strip()
+            if not row:
+                continue
+            packet = ast.literal_eval(row)
+            try:
+                first_index += 1 if is_right_order(packet, first_divider_packet) else 0
+                second_index += (
+                    1 if is_right_order(packet, second_divider_packet) else 0
+                )
+            except:
+                print("errors comparing")
+                print(packet)
+    return first_index * second_index
 
 
 if __name__ == "__main__":
     print(part1())
-    # print(part2())
+    print(part2())
