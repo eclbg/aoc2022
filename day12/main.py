@@ -1,3 +1,5 @@
+# https://adventofcode.com/2022/day/12
+
 import math
 import copy
 from dataclasses import dataclass
@@ -9,10 +11,10 @@ class Cell:
         self._height = height
         self._distance = None
 
-    def set_distance(self, distance):
+    def set_distance(self, distance: int) -> None:
         self._distance = distance
 
-    def get_distance(self):
+    def get_distance(self) -> int:
         return self._distance
 
     def get_height(self) -> int:
@@ -46,7 +48,7 @@ class HeightMap:
     def set_end_pos(self, end_pos: Tuple) -> None:
         self._end_pos = end_pos
 
-    def get_num_rows(self):
+    def get_num_rows(self) -> int:
         return self._num_rows
 
     def add_row(self, row: list[Cell]) -> None:
@@ -106,12 +108,13 @@ class HeightMap:
                     to_eval_next.append(dest)
             curr_step += 1
 
-    def get_possible_starts(self) -> list(Tuple[int, int]):
+    def get_cells_of_height(self, height: int) -> list(Tuple[int, int]):
         return [
-            x[0] for x in filter(lambda x: x[1].get_height() == 0, self._grid.items())
+            x[0]
+            for x in filter(lambda x: x[1].get_height() == height, self._grid.items())
         ]
 
-    def reset_distances(self):
+    def reset_distances(self) -> None:
         for cell in self._grid.values():
             cell.set_distance(None)
 
@@ -151,7 +154,7 @@ def part2():
     with open("input.txt") as f:
         heightmap = parse_input_file(f)
     shortest_overall = math.inf
-    possible_starts = heightmap.get_possible_starts()
+    possible_starts = heightmap.get_cells_of_height(height=0)
     for start_pos in possible_starts:
         heightmap.reset_distances()
         heightmap.set_start_pos(start_pos)
